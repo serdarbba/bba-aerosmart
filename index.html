@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BBA × Aerosmart — Aerial &amp; Camera Intelligence</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#B8932F;--gold2:#cfa94a;
+  --ink:#0c1a2e;--ink2:#23344a;--mut:#647688;--line:#e7ecf2;
+  --bg:#ffffff;--bg2:#f4f7fb;--panel:#fbfcfe;
+  --blue:#2f7fc4;--green:#1aa564;--red:#d8483f;--amber:#e08a17;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+
+/* ── SCROLL-SNAP DECK ── */
+.deck{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory;scroll-behavior:smooth;}
+.slide{min-height:100vh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;padding:72px 7vw;position:relative;overflow:hidden;}
+.slide.alt{background:var(--bg2);}
+.slide.ink{background:linear-gradient(150deg,#0c1a2e,#13263d);color:#fff;}
+.inner{width:100%;max-width:1180px;margin:0 auto;}
+
+/* ── PROGRESS + NAV ── */
+.progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2));width:0;z-index:50;transition:width .2s;}
+.brandbar{position:fixed;top:18px;left:7vw;z-index:40;display:flex;align-items:center;gap:11px;}
+.brandbar img{height:30px;border-radius:6px;}
+.brandbar .x{color:#aab6c4;font-size:14px;}
+.brandbar .wm{font-family:'Rajdhani';font-weight:700;letter-spacing:2px;font-size:15px;color:var(--ink);transition:color .4s;}
+.brandbar.dark .wm{color:#fff;}.brandbar.dark .x{color:#8095aa;}
+.counter.dark{color:#9fb2c6;}
+.slide.ink~.slide{}
+.counter{position:fixed;bottom:20px;right:7vw;z-index:40;font-size:12px;letter-spacing:2px;color:var(--mut);font-variant-numeric:tabular-nums;}
+.scrollhint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:7px;}
+.scrollhint .m{width:22px;height:34px;border:1.5px solid var(--mut);border-radius:11px;position:relative;}
+.scrollhint .m::after{content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);width:3px;height:6px;background:var(--mut);border-radius:2px;animation:wheel 1.6s infinite;}
+@keyframes wheel{0%{opacity:1;top:6px;}60%{opacity:0;top:16px;}100%{opacity:0;}}
+
+/* ── ENTRANCE TRANSITIONS ── */
+.rise{opacity:0;transform:translateY(34px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);}
+.slide.in .rise{opacity:1;transform:none;}
+.slide.in .rise:nth-child(2){transition-delay:.08s;}
+.slide.in .rise:nth-child(3){transition-delay:.16s;}
+.slide.in .rise:nth-child(4){transition-delay:.24s;}
+.in .d1{transition-delay:.1s;}.in .d2{transition-delay:.2s;}.in .d3{transition-delay:.3s;}
+.in .d4{transition-delay:.4s;}.in .d5{transition-delay:.5s;}.in .d6{transition-delay:.6s;}
+
+/* ── TYPE ── */
+.eyebrow{font-size:14px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:22px;display:flex;align-items:center;gap:12px;}
+.eyebrow::before{content:'';width:32px;height:2px;background:var(--gold);}
+.ink .eyebrow{color:var(--gold2);}.ink .eyebrow::before{background:var(--gold2);}
+h1{font-family:'Rajdhani';font-weight:700;font-size:clamp(46px,7vw,90px);line-height:1.03;letter-spacing:-.5px;margin-bottom:26px;}
+h1 em{font-style:normal;color:var(--gold);}
+.ink h1 em{color:var(--gold2);}
+h2{font-family:'Rajdhani';font-weight:700;font-size:clamp(38px,5.7vw,64px);line-height:1.05;letter-spacing:-.3px;margin-bottom:18px;}
+h2 em{font-style:normal;color:var(--gold);}
+.lead{font-size:clamp(20px,2.4vw,27px);color:var(--ink2);max-width:840px;line-height:1.55;font-weight:400;}
+.ink .lead{color:#c4d4e6;}
+.lead b{color:var(--ink);font-weight:600;}.ink .lead b{color:#fff;}
+.kicker{font-size:14px;color:var(--mut);max-width:620px;margin-top:14px;}
+
+/* ── TITLE SLIDE ── */
+.title-co{display:flex;align-items:center;gap:18px;margin-bottom:40px;}
+.title-co img{height:54px;border-radius:9px;}
+.title-co .x{color:#b6c2d0;font-size:22px;font-weight:300;}
+.title-co .wm{font-family:'Rajdhani';font-weight:700;letter-spacing:3px;font-size:26px;}
+.title-co .wm small{display:block;font-family:'Inter';font-weight:400;letter-spacing:2px;font-size:9px;color:var(--mut);text-transform:uppercase;margin-top:3px;}
+.tag-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px;}
+.tag{border:1.5px solid var(--line);border-radius:30px;padding:11px 22px;font-size:16px;color:var(--ink2);font-weight:500;background:#fff;}
+.tag.g{border-color:var(--gold);color:var(--gold);background:rgba(184,147,47,.05);}
+
+/* ── ANY-CAMERA SLIDE ── */
+.feeds{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px;}
+.feed{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 10px 30px -18px rgba(12,26,46,.25);position:relative;display:flex;flex-direction:column;}
+.feed video,.feed img{width:100%;height:210px;object-fit:cover;display:block;background:#0c1a2e;}
+.feed .tag-live{position:absolute;top:11px;left:11px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;color:#fff;padding:4px 9px;border-radius:5px;}
+.feed .tag-live.b{background:rgba(47,127,196,.95);}
+.feed .tag-live.g{background:rgba(26,165,100,.95);}
+.feed .tag-live.gold{background:rgba(184,147,47,.95);}
+.feed .cap{padding:15px 17px;}
+.feed .cap b{display:block;font-size:18px;font-weight:600;margin-bottom:4px;}
+.feed .cap span{font-size:14.5px;color:var(--mut);}
+.feed.cap-card{align-items:center;justify-content:center;background:var(--bg2);border-style:dashed;border-color:#cfd9e4;}
+.feed .capbox{padding:28px 22px;text-align:center;}
+.feed .capbox .bigic{font-size:40px;margin-bottom:14px;}
+.feed .capbox b{display:block;font-size:19px;margin-bottom:9px;color:var(--ink);}
+.feed .capbox span{font-size:15px;color:var(--mut);line-height:1.55;}
+
+/* ── BREADTH WALL ── */
+.wall{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px;}
+.cap{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:11px;padding:13px 14px;background:#fff;transition:transform .5s,box-shadow .5s,border-color .5s;}
+.slide.in .cap{}
+.cap:hover{border-color:var(--gold);box-shadow:0 8px 22px -14px rgba(184,147,47,.5);}
+.cap .i{font-size:18px;width:24px;text-align:center;flex-shrink:0;}
+.cap .t{font-size:15px;font-weight:500;color:var(--ink2);line-height:1.3;}
+.wall-note{margin-top:22px;font-size:16.5px;color:var(--mut);}
+.wall-note b{color:var(--gold);}
+
+/* ── PROOF / DETECTIONS ── */
+.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:6px;}
+.shot{border-radius:16px;overflow:hidden;position:relative;border:1px solid var(--line);box-shadow:0 14px 36px -22px rgba(12,26,46,.4);}
+.shot img{width:100%;height:240px;object-fit:cover;display:block;}
+.shot .cap{position:absolute;left:0;right:0;bottom:0;padding:32px 16px 14px;background:linear-gradient(transparent,rgba(8,16,28,.92));color:#fff;font-size:16px;}
+.shot .cap b{color:var(--gold2);}
+.shot .badge{position:absolute;top:11px;left:11px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;background:rgba(26,165,100,.92);color:#fff;padding:4px 9px;border-radius:5px;font-weight:600;}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:26px;}
+.metric{text-align:center;}
+.metric .n{font-family:'Rajdhani';font-weight:700;font-size:clamp(30px,3.6vw,46px);color:var(--gold);line-height:1;}
+.metric .l{font-size:15px;color:var(--mut);margin-top:8px;}
+
+/* ── SECTORS ── */
+.secs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:8px;}
+.sec{border:1px solid var(--line);border-radius:15px;padding:22px 19px;background:#fff;transition:transform .5s,box-shadow .5s;box-shadow:0 10px 30px -22px rgba(12,26,46,.3);}
+.sec .ic{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:25px;margin-bottom:15px;}
+.sec h3{font-family:'Rajdhani';font-weight:700;font-size:24px;margin-bottom:4px;}
+.sec .sub{font-size:12.5px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-bottom:15px;}
+.sec ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.sec li{font-size:15px;color:var(--ink2);padding-left:16px;position:relative;}
+.sec li::before{content:'';position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:2px;background:var(--gold);}
+
+/* ── BIG VISUAL SLIDES ── */
+.showcase{display:grid;grid-template-columns:1fr 1.35fr;gap:46px;align-items:center;}
+.showcase.flip{grid-template-columns:1.35fr 1fr;}
+.showcase.flip .txt{order:2;}
+.bigfig{border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.12);box-shadow:0 30px 70px -30px rgba(0,0,0,.6);position:relative;}
+.bigfig img{width:100%;display:block;}
+.bigfig .badge{position:absolute;top:13px;left:13px;font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;background:rgba(184,147,47,.95);color:#0c1a2e;padding:5px 11px;border-radius:6px;font-weight:700;}
+.feature-list{list-style:none;margin-top:24px;display:flex;flex-direction:column;gap:13px;}
+.feature-list li{font-size:18px;display:flex;gap:13px;align-items:flex-start;}
+.feature-list .dot{width:9px;height:9px;border-radius:50%;background:var(--gold2);margin-top:7px;flex-shrink:0;}
+.ink .feature-list li{color:#d4e0ee;}
+
+/* ── LOOP (unmanned) ── */
+.loop4{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:18px;}
+.loop4 .step{text-align:center;padding:0 14px;position:relative;}
+.loop4 .step .o{width:74px;height:74px;border-radius:50%;border:2px solid var(--gold2);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 16px;}
+.loop4 .step h4{font-family:'Rajdhani';font-size:23px;font-weight:700;margin-bottom:6px;}
+.loop4 .step p{font-size:15.5px;color:#c4d4e6;}
+.loop4 .step:not(:last-child)::after{content:'→';position:absolute;top:24px;right:-9px;color:var(--gold2);font-size:22px;}
+
+/* ── TRACK RECORD ── */
+.track{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:8px;}
+.tr{border:1px solid var(--line);border-radius:15px;padding:24px 26px;background:#fff;box-shadow:0 10px 30px -22px rgba(12,26,46,.3);}
+.tr .h{font-family:'Rajdhani';font-weight:700;font-size:25px;color:var(--gold);margin-bottom:8px;}
+.tr p{font-size:16.5px;color:var(--ink2);line-height:1.55;}.tr p b{color:var(--ink);}
+
+/* ── PARTNERSHIP ── */
+.pship{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px;}
+.pc{border:1px solid var(--line);border-radius:16px;padding:30px;background:#fff;box-shadow:0 12px 34px -24px rgba(12,26,46,.35);}
+.pc .top{display:flex;align-items:center;gap:13px;margin-bottom:20px;}
+.pc .top img{height:42px;border-radius:8px;}
+.pc h3{font-family:'Rajdhani';font-weight:700;font-size:23px;}
+.pc .role{font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);}
+.pc ul{list-style:none;display:flex;flex-direction:column;gap:11px;}
+.pc li{font-size:17.5px;color:var(--ink2);padding-left:26px;position:relative;}
+.pc li::before{content:'✓';position:absolute;left:0;color:var(--green);font-weight:700;}
+.pc.deliver li::before{content:'→';color:var(--gold);}
+.pc .ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:21px;background:rgba(184,147,47,.1);}
+.pc.deliver .ico{background:rgba(47,127,196,.1);}
+
+/* ── CLOSE ── */
+.close-co{display:flex;align-items:center;gap:16px;margin-top:40px;}
+.close-co img{height:42px;border-radius:8px;}
+.close-co .wm{font-family:'Rajdhani';font-weight:700;letter-spacing:2px;font-size:19px;color:#fff;}
+.close-meta{margin-top:34px;font-size:13px;color:#9fb2c6;line-height:1.8;}
+
+@media(max-width:880px){
+  .slide{padding:84px 28px 64px;}
+  .feeds,.shots,.secs,.wall{grid-template-columns:1fr 1fr;}
+  .metrics{grid-template-columns:1fr 1fr;}
+  .showcase,.showcase.flip{grid-template-columns:1fr;gap:26px;}
+  .showcase.flip .txt{order:0;}
+  .loop4,.track,.pship{grid-template-columns:1fr;gap:22px;}
+  .loop4 .step:not(:last-child)::after{display:none;}
+  .brandbar,.counter{left:28px;right:28px;}
+}
+@media print{
+  @page{size:1280px 720px;margin:0;}
+  .deck{height:auto;overflow:visible;display:block;}
+  .slide{min-height:0;height:auto;overflow:visible;page-break-after:always;padding:26px 60px;background:#fff!important;color:var(--ink)!important;justify-content:center;}
+  .slide h1{margin-bottom:18px;} .slide h2{margin-bottom:14px;} .lead{line-height:1.45;}
+  .feeds,.shots{grid-template-columns:repeat(3,1fr)!important;}
+  .wall,.secs{grid-template-columns:repeat(4,1fr)!important;}
+  .metrics,.loop4{grid-template-columns:repeat(4,1fr)!important;}
+  .showcase,.showcase.flip{grid-template-columns:1fr 1.25fr!important;}
+  .showcase.flip .txt{order:0!important;}
+  .track,.pship{grid-template-columns:repeat(2,1fr)!important;}
+  .slide.ink{color:var(--ink)!important;}
+  .slide.ink h1,.slide.ink h2,.slide.ink .lead,.ink .feature-list li,.loop4 .step p{color:var(--ink)!important;}
+  .rise{opacity:1!important;transform:none!important;}
+  .progress,.brandbar,.counter,.scrollhint,.scrollhint .m{display:none!important;}
+  .feed video{display:none;} .feed .ph{display:flex;}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<div class="brandbar"><img src="assets/logo.png" alt="BBA"><span class="x">×</span><span class="wm">AEROSMART</span></div>
+<div class="counter" id="counter">01 / 12</div>
+
+<div class="deck" id="deck">
+
+  <!-- 01 · TITLE -->
+  <section class="slide" data-i="1">
+    <div class="inner">
+      <div class="title-co rise">
+        <img src="assets/logo.png" alt="BBA">
+        <span class="x">×</span>
+        <span class="wm">AEROSMART<small>UAV Trading &amp; Field Operations</small></span>
+      </div>
+      <div class="eyebrow rise">Aerial &amp; Camera Intelligence</div>
+      <h1 class="rise">Autonomous Drones.<br>Any Camera.<br><em>Total Intelligence.</em></h1>
+      <p class="lead rise">We don't just fly drones — we turn <b>any video feed</b> into decisions, alerts and reports. On a drone, or on the cameras you already own.</p>
+      <div class="tag-row rise">
+        <span class="tag g">30+ AI capabilities</span>
+        <span class="tag">Drone &amp; fixed-camera</span>
+        <span class="tag">GPS-denied flight</span>
+        <span class="tag">Fully unmanned 24/7</span>
+      </div>
+    </div>
+    <div class="scrollhint"><div class="m"></div>Scroll</div>
+  </section>
+
+  <!-- 02 · ANY CAMERA -->
+  <section class="slide alt" data-i="2">
+    <div class="inner">
+      <div class="eyebrow rise">The Core Idea</div>
+      <h2 class="rise">The intelligence isn't the drone.<br>It's <em>what the AI sees.</em></h2>
+      <p class="lead rise">The same engine runs on an autonomous drone <b>and</b> on existing fixed / CCTV cameras. A client can start with the cameras already on site — no drone required — then scale up to autonomous flight.</p>
+      <div class="feeds rise d2">
+        <div class="feed"><span class="tag-live gold">Drone + AI</span><video src="assets/clip_fire.mp4" poster="assets/poster_clip_fire.jpg" autoplay muted loop playsinline></video><div class="cap"><b>Wildfire &amp; hazard detection</b><span>Live AI on a drone feed</span></div></div>
+        <div class="feed"><span class="tag-live gold">Drone + AI</span><video src="assets/clip_coast.mp4" poster="assets/poster_clip_coast.jpg" autoplay muted loop playsinline></video><div class="cap"><b>Coastal zone monitoring</b><span>Live AI on a drone feed</span></div></div>
+        <div class="feed cap-card"><div class="capbox"><div class="bigic">📹</div><b>Your fixed &amp; CCTV cameras</b><span>The same AI runs on the cameras you already have — no drone needed.</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · BREADTH WALL -->
+  <section class="slide" data-i="3">
+    <div class="inner">
+      <div class="eyebrow rise">One Platform · The Breadth</div>
+      <h2 class="rise">30+ AI capabilities. <em>One system.</em></h2>
+      <div class="wall rise d1">
+        <div class="cap"><span class="i">🪨</span><span class="t">Crack &amp; defect detection</span></div>
+        <div class="cap"><span class="i">🌡️</span><span class="t">Thermal hot-spot mapping</span></div>
+        <div class="cap"><span class="i">🔥</span><span class="t">Fire &amp; smoke detection</span></div>
+        <div class="cap"><span class="i">🛢️</span><span class="t">Leak / surface anomaly</span></div>
+        <div class="cap"><span class="i">🔧</span><span class="t">Corrosion detection</span></div>
+        <div class="cap"><span class="i">🔄</span><span class="t">Change detection</span></div>
+        <div class="cap"><span class="i">📈</span><span class="t">Work-progress monitoring</span></div>
+        <div class="cap"><span class="i">🗺️</span><span class="t">Orthomosaic &amp; 3D mapping</span></div>
+        <div class="cap"><span class="i">⛰️</span><span class="t">Volume / stockpile</span></div>
+        <div class="cap"><span class="i">☀️</span><span class="t">Solar cell-failure</span></div>
+        <div class="cap"><span class="i">🌿</span><span class="t">Vegetation health</span></div>
+        <div class="cap"><span class="i">🌲</span><span class="t">Vegetation encroachment</span></div>
+        <div class="cap"><span class="i">🌊</span><span class="t">Erosion / terrain change</span></div>
+        <div class="cap"><span class="i">💧</span><span class="t">Water-quality anomaly</span></div>
+        <div class="cap"><span class="i">🚷</span><span class="t">Restricted-zone intrusion</span></div>
+        <div class="cap"><span class="i">🛡️</span><span class="t">Perimeter patrol</span></div>
+        <div class="cap"><span class="i">🏗️</span><span class="t">Illegal-structure detection</span></div>
+        <div class="cap"><span class="i">👥</span><span class="t">People counting</span></div>
+        <div class="cap"><span class="i">🔥</span><span class="t">Crowd-density &amp; alerts</span></div>
+        <div class="cap"><span class="i">🚗</span><span class="t">Vehicle detection &amp; count</span></div>
+        <div class="cap"><span class="i">🅿️</span><span class="t">Parking / occupancy</span></div>
+        <div class="cap"><span class="i">📦</span><span class="t">Asset inventory &amp; count</span></div>
+        <div class="cap"><span class="i">⚠️</span><span class="t">Missing / damaged asset</span></div>
+        <div class="cap"><span class="i">🐦</span><span class="t">Animal / bird activity</span></div>
+      </div>
+      <p class="wall-note rise d3">…and growing. <b>Custom models trained to a client's exact target on request.</b></p>
+    </div>
+  </section>
+
+  <!-- 04 · PROOF -->
+  <section class="slide ink" data-i="4">
+    <div class="inner">
+      <div class="eyebrow rise">Already Shipped · Real Footage</div>
+      <h2 class="rise">Trained. Deployed. <em>Validated.</em></h2>
+      <div class="shots rise d1">
+        <div class="shot"><span class="badge">Live detection</span><img src="assets/cv_people.jpg" alt=""><div class="cap"><b>People &amp; density</b> — live count, per-zone alerts</div></div>
+        <div class="shot"><span class="badge">Live detection</span><img src="assets/cv_parking.jpg" alt=""><div class="cap"><b>Vehicle &amp; parking</b> — utilization &amp; zone counts</div></div>
+        <div class="shot"><span class="badge" style="background:rgba(47,127,196,.92)">Live deployment</span><img src="assets/korfez.jpg" alt=""><div class="cap"><b>İzmir Bay · live monitoring</b> — vessel &amp; pollution-anomaly detection</div></div>
+      </div>
+      <div class="metrics rise d3">
+        <div class="metric"><div class="n">19</div><div class="l">models in production</div></div>
+        <div class="metric"><div class="n">27/28</div><div class="l">client use-cases delivered</div></div>
+        <div class="metric"><div class="n">30+</div><div class="l">AI capabilities</div></div>
+        <div class="metric"><div class="n">Any</div><div class="l">camera — drone or fixed</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- · WHAT WE DELIVER / WHAT YOU GAIN -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow rise">The Offer · Clear &amp; Concrete</div>
+      <h2 class="rise">What we deliver. <em>What you gain.</em></h2>
+      <div class="pship rise d1">
+        <div class="pc deliver">
+          <div class="top"><span class="ico">📦</span><div><h3>What we deliver</h3><div class="role" style="color:var(--blue)">Concrete scope</div></div></div>
+          <ul>
+            <li>AI vision software — on your existing cameras, or ours</li>
+            <li>Autonomous drone + charging dock <span style="color:var(--mut)">(optional)</span></li>
+            <li>Live command dashboard + automated, geo-tagged reports</li>
+            <li>Setup, model tuning, training &amp; support — managed or self-run</li>
+          </ul>
+        </div>
+        <div class="pc">
+          <div class="top"><span class="ico">📈</span><div><h3>What you gain</h3><div class="role">Real value</div></div></div>
+          <ul>
+            <li>Catch faults early — before failure, fire or downtime</li>
+            <li>No crews in danger zones — the drone inspects, not people</li>
+            <li>Lower cost &amp; faster cycles — automated &amp; repeatable, 24/7</li>
+            <li>Start with cameras you already own — scale to drones later</li>
+          </ul>
+        </div>
+      </div>
+      <p class="wall-note rise d3" style="text-align:center;">We scope every engagement to <b>exactly what we can deliver</b> — no overpromising.</p>
+    </div>
+  </section>
+
+  <!-- 05 · INSPECTION SECTORS -->
+  <section class="slide alt" data-i="5">
+    <div class="inner">
+      <div class="eyebrow rise">Inspection · Ready To Demo</div>
+      <h2 class="rise">Four sectors, <em>day one.</em></h2>
+      <div class="secs rise d1">
+        <div class="sec"><div class="ic" style="background:rgba(224,138,23,.12)">☀️</div><h3>Energy &amp; Solar</h3><div class="sub">Solar · substations</div><ul><li>Hot-spot &amp; cell failure</li><li>Cracked / soiled panels</li><li>Output anomaly mapping</li></ul></div>
+        <div class="sec"><div class="ic" style="background:rgba(47,127,196,.12)">📡</div><h3>Transmission</h3><div class="sub">Lines · towers</div><ul><li>Corrosion &amp; defects</li><li>Conductor hot-spots</li><li>Vegetation under lines</li></ul></div>
+        <div class="sec"><div class="ic" style="background:rgba(184,147,47,.14)">⛏️</div><h3>Mining &amp; Build</h3><div class="sub">Pits · sites</div><ul><li>Stockpile volume</li><li>Progress vs. baseline</li><li>Slope movement</li></ul></div>
+        <div class="sec"><div class="ic" style="background:rgba(216,72,63,.12)">🛢️</div><h3>Oil &amp; Gas</h3><div class="sub">Pipelines · tanks</div><ul><li>Fire / smoke / leak</li><li>Tank-roof defects</li><li>Right-of-way intrusion</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 · GPS-DENIED -->
+  <section class="slide ink" data-i="6">
+    <div class="inner showcase">
+      <div class="txt">
+        <div class="eyebrow rise">Flight Autonomy</div>
+        <h2 class="rise">Flies where GPS <em>doesn't exist.</em></h2>
+        <p class="lead rise">Indoors, in tunnels, between tank rows, under a refinery deck — on-board visual SLAM keeps the drone stable with <b>zero GPS</b>.</p>
+        <ul class="feature-list rise d2">
+          <li><span class="dot"></span>On-board visual-inertial SLAM</li>
+          <li><span class="dot"></span>Depth-camera obstacle avoidance</li>
+          <li><span class="dot"></span>Reaches jobs other drones can't</li>
+        </ul>
+      </div>
+      <div class="bigfig rise d1"><span class="badge">Live · PX4</span><img src="assets/poster_gpsdenied.jpg" alt="GPS-denied flight"></div>
+    </div>
+  </section>
+
+  <!-- 07 · SWARM -->
+  <section class="slide" data-i="7">
+    <div class="inner showcase flip">
+      <div class="bigfig rise d1"><span class="badge">Real product</span><img src="assets/poster_swarm.jpg" alt="Multi-drone command"></div>
+      <div class="txt">
+        <div class="eyebrow rise">Multi-UAV &amp; AI Co-Pilot</div>
+        <h2 class="rise">Many drones. <em>One AI brain.</em></h2>
+        <p class="lead rise">Split a large site into sectors, assign a drone to each, and command the fleet in plain language. The AI co-pilot arms, tasks and reports back.</p>
+        <ul class="feature-list rise d2" style="color:var(--ink2)">
+          <li><span class="dot" style="background:var(--gold)"></span>Sector tasking &amp; formation flight</li>
+          <li><span class="dot" style="background:var(--gold)"></span>Natural-language commands</li>
+          <li><span class="dot" style="background:var(--gold)"></span>One operator, whole fleet</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 · COMMAND CENTER -->
+  <section class="slide alt" data-i="8">
+    <div class="inner showcase">
+      <div class="txt">
+        <div class="eyebrow rise">Command Center</div>
+        <h2 class="rise">Every flight becomes a <em>report.</em></h2>
+        <p class="lead rise">Live telemetry, switchable map layers and AI events in one picture — rolled up into counts, heatmaps, trends and exportable geo-tagged reports. Runs <b>offline / on-premises.</b></p>
+        <ul class="feature-list rise d2" style="color:var(--ink2)">
+          <li><span class="dot" style="background:var(--gold)"></span>Orthomosaic · LIDAR · thermal layers</li>
+          <li><span class="dot" style="background:var(--gold)"></span>KPI dashboards &amp; audit reports</li>
+          <li><span class="dot" style="background:var(--gold)"></span>No cloud dependency required</li>
+        </ul>
+      </div>
+      <div class="bigfig rise d1" style="border-color:var(--line)"><span class="badge">Operation map</span><img src="assets/gcs.jpg" alt="Command center"></div>
+    </div>
+  </section>
+
+  <!-- 09 · UNMANNED -->
+  <section class="slide ink" data-i="9">
+    <div class="inner">
+      <div class="eyebrow rise">Automation</div>
+      <h2 class="rise">Run it <em>without a crew.</em></h2>
+      <p class="lead rise">A human sets the objective once. The system repeats it on schedule — and only calls a person when something matters.</p>
+      <div class="loop4 rise d2">
+        <div class="step"><div class="o">🛫</div><h4>Launch</h4><p>Auto take-off from dock, on schedule</p></div>
+        <div class="step"><div class="o">🔍</div><h4>Inspect</h4><p>Fly route, AI sees &amp; flags</p></div>
+        <div class="step"><div class="o">📊</div><h4>Report</h4><p>Alerts &amp; evidence to dashboard</p></div>
+        <div class="step"><div class="o">🔋</div><h4>Recharge</h4><p>Precision-land, charge, repeat</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · TRACK RECORD -->
+  <section class="slide" data-i="10">
+    <div class="inner">
+      <div class="eyebrow rise">Track Record</div>
+      <h2 class="rise">Delivered work. <em>Real deployments.</em></h2>
+      <div class="track rise d1">
+        <div class="tr"><div class="h">İzmir Metropolitan · Bay Monitoring</div><p>Coastal <b>pollution &amp; vessel monitoring</b> over the bay — live AI on fixed shore cameras.</p></div>
+        <div class="tr"><div class="h">Arvato · Indoor &amp; Outdoor Patrol</div><p>Autonomous <b>indoor &amp; outdoor patrol</b> across logistics facilities — unmanned, 24/7.</p></div>
+        <div class="tr"><div class="h">Digital Twin · Mall Complex</div><p>3D <b>digital-twin &amp; AI monitoring</b> platform for a large shopping-mall complex.</p></div>
+        <div class="tr"><div class="h">GPS-Denied Autonomous Flight</div><p>Stable indoor flight on <b>real PX4 firmware</b> — validated, repeatable, zero GPS.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 · PARTNERSHIP -->
+  <section class="slide alt" data-i="11">
+    <div class="inner">
+      <div class="eyebrow rise">How We Work Together</div>
+      <h2 class="rise">Two companies. <em>One offering.</em></h2>
+      <div class="pship rise d1">
+        <div class="pc"><div class="top"><img src="assets/logo.png" alt="BBA"><div><h3>BBA Technology</h3><div class="role">Technology &amp; AI · İzmir</div></div></div>
+          <ul><li>Autonomy, flight-control &amp; SLAM</li><li>AI vision models &amp; custom training</li><li>Dashboards, analytics &amp; product IP</li></ul></div>
+        <div class="pc"><div class="top"><span class="wm" style="font-family:'Rajdhani';font-weight:700;letter-spacing:2px;font-size:22px;">AEROSMART</span></div>
+          <ul><li>Client relationship &amp; regional reach</li><li>Field operations &amp; flight services</li><li>Hardware supply &amp; local support</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 · CLOSE -->
+  <section class="slide ink" data-i="12">
+    <div class="inner">
+      <div class="eyebrow rise">Ready To Deploy</div>
+      <h1 class="rise">Bring an asset.<br>We'll make it <em>intelligent.</em></h1>
+      <p class="lead rise">Tell us the asset and the country — we'll shape a targeted demo, and the deployment plan behind it, within days.</p>
+      <div class="close-co rise d2"><img src="assets/logo.png" alt="BBA"><span style="color:#7e93a8;">×</span><span class="wm">AEROSMART</span></div>
+      <div class="close-meta rise d3"><b style="color:#c4d4e6;">BBA Technology</b> — Autonomous Drone &amp; AI Systems · İzmir, Türkiye<br><b style="color:#c4d4e6;">Aerosmart</b> — UAV Trading &amp; Field Operations</div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const deck=document.getElementById('deck'), prog=document.getElementById('prog'), counter=document.getElementById('counter');
+const slides=[...document.querySelectorAll('.slide')];
+const brandbar=document.querySelector('.brandbar');
+const TOTAL=slides.length;
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');
+  const i=slides.indexOf(e.target)+1; counter.textContent=String(i).padStart(2,'0')+' / '+TOTAL;
+  const dark=e.target.classList.contains('ink');
+  brandbar.classList.toggle('dark',dark); counter.classList.toggle('dark',dark);}})},{threshold:.45});
+counter.textContent='01 / '+TOTAL;
+slides.forEach(s=>io.observe(s));
+deck.addEventListener('scroll',()=>{prog.style.width=(deck.scrollTop/(deck.scrollHeight-deck.clientHeight)*100)+'%';},{passive:true});
+// keyboard nav
+addEventListener('keydown',e=>{const h=innerHeight;
+  if(['ArrowDown','PageDown',' '].includes(e.key)){e.preventDefault();deck.scrollBy({top:h,behavior:'smooth'});}
+  if(['ArrowUp','PageUp'].includes(e.key)){e.preventDefault();deck.scrollBy({top:-h,behavior:'smooth'});}});
+slides[0].classList.add('in');
+</script>
+</body>
+</html>

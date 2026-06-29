@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BBA × Aerosmart — Autonomous Drone Inspection & Aerial Intelligence</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#C9A84C;--gold2:#F0D878;
+  --navy:#060e1f;--navy2:#0b1628;--card:#0d1a30;
+  --green:#2dd462;--red:#ff5757;--orange:#ff9800;--blue:#3a8fd4;--cyan:#33d1c9;
+  --txt:#dfe9f3;--mut:#6a8aaa;--dim:#46637f;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--navy);color:var(--txt);font-family:'Inter',sans-serif;line-height:1.6;overflow-x:hidden;}
+
+/* ANIMATIONS */
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+@keyframes ping{0%{transform:scale(1);opacity:.7;}100%{transform:scale(2.6);opacity:0;}}
+@keyframes drift{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+@keyframes glow{0%,100%{box-shadow:0 0 24px rgba(201,168,76,.1);}50%{box-shadow:0 0 50px rgba(201,168,76,.32);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes scan{0%{top:-8%;}100%{top:108%;}}
+@keyframes dash{to{stroke-dashoffset:0;}}
+
+/* LAYOUT */
+.wrap{max-width:1000px;margin:0 auto;padding:0 40px;}
+.section{padding:64px 0;}
+.section+.section{border-top:1px solid rgba(255,255,255,.05);}
+.eyebrow{font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;opacity:.8;display:flex;align-items:center;gap:10px;}
+.eyebrow::before{content:'';width:26px;height:1px;background:var(--gold);}
+.sec-title{font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;letter-spacing:.5px;margin-bottom:10px;color:#fff;}
+.sec-title em{font-style:normal;color:var(--gold);}
+.sec-body{font-size:14.5px;color:var(--mut);line-height:1.85;max-width:760px;margin-bottom:36px;}
+.sec-body strong{color:#a9cae2;font-weight:600;}
+.topbar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));}
+.live{display:inline-flex;align-items:center;gap:7px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green);font-weight:600;}
+.live::before{content:'';width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 1.4s ease-in-out infinite;}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;background:radial-gradient(circle at 75% 15%,#0e1d36 0%,#060e1f 60%);padding:30px 40px 70px;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.04) 1px,transparent 1px);background-size:54px 54px;}
+.hero-radial{position:absolute;width:760px;height:760px;background:radial-gradient(circle,rgba(201,168,76,.08) 0%,transparent 65%);right:-220px;top:-160px;animation:drift 10s ease-in-out infinite;}
+.hero-inner{max-width:1000px;margin:0 auto;position:relative;z-index:1;}
+.cobrand{display:flex;align-items:center;gap:18px;margin-bottom:46px;flex-wrap:wrap;}
+.cobrand img{height:46px;width:auto;border-radius:8px;}
+.cobrand .x{color:var(--dim);font-size:20px;font-weight:300;}
+.wordmark{font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:3px;font-size:22px;color:#fff;line-height:1;}
+.wordmark small{display:block;font-family:'Inter';font-weight:400;letter-spacing:2px;font-size:8.5px;color:var(--dim);text-transform:uppercase;margin-top:3px;}
+.hero h1{font-family:'Rajdhani',sans-serif;font-size:54px;font-weight:700;letter-spacing:1.5px;line-height:1.06;margin-bottom:20px;animation:fadeUp .8s ease both;color:#fff;}
+.hero h1 em{font-style:normal;color:var(--gold);}
+.hero-desc{font-size:16px;color:#90b0cc;max-width:680px;line-height:1.8;animation:fadeUp .8s .1s ease both;}
+.hero-desc strong{color:#cfe2f2;}
+.byline{margin-top:18px;font-size:12px;letter-spacing:1px;color:var(--dim);animation:fadeUp .8s .15s ease both;}
+.byline b{color:var(--gold);font-weight:600;}
+.pills{display:flex;gap:9px;margin-top:30px;flex-wrap:wrap;animation:fadeUp .8s .2s ease both;}
+.pill{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:7px 15px;font-size:12px;color:#9bbad4;}
+.pill.gold{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.25);color:var(--gold);}
+
+/* STAT STRIP */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:42px;animation:fadeUp .8s .3s ease both;}
+.stat{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:18px 16px;}
+.stat .num{font-family:'Rajdhani',sans-serif;font-size:34px;font-weight:700;color:var(--gold);line-height:1;}
+.stat .lbl{font-size:11px;color:var(--mut);margin-top:7px;line-height:1.4;}
+
+/* LOOP */
+.loop{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin-bottom:8px;}
+.loop-step{flex:1;min-width:150px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:22px 18px;position:relative;}
+.loop-step+.loop-step{margin-left:-1px;}
+.loop-num{font-size:11px;letter-spacing:2px;color:var(--gold);font-weight:700;margin-bottom:10px;}
+.loop-step h4{font-family:'Rajdhani',sans-serif;font-size:18px;color:#fff;margin-bottom:7px;letter-spacing:.5px;}
+.loop-step p{font-size:12.5px;color:var(--mut);line-height:1.6;}
+.loop-arrow{display:flex;align-items:center;color:rgba(201,168,76,.4);font-size:22px;padding:0 6px;}
+.loop-back{margin-top:14px;text-align:center;font-size:12px;color:var(--gold);background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.16);border-radius:8px;padding:10px;}
+
+/* STACK CARDS */
+.stack{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.scard{background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:26px;position:relative;overflow:hidden;}
+.scard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent,var(--gold)),transparent);opacity:.6;}
+.scard .ic{width:44px;height:44px;border-radius:10px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.22);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px;}
+.scard h3{font-family:'Rajdhani',sans-serif;font-size:21px;color:#fff;margin-bottom:6px;letter-spacing:.5px;}
+.scard .tag{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.scard ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.scard li{font-size:13px;color:var(--mut);padding-left:18px;position:relative;line-height:1.5;}
+.scard li::before{content:'→';position:absolute;left:0;color:var(--gold);font-size:11px;top:2px;}
+
+/* SECTOR PLAYBOOKS */
+.sectors{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.sec-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;}
+.sec-head{padding:20px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:14px;}
+.sec-head .badge{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.sec-head h3{font-family:'Rajdhani',sans-serif;font-size:20px;color:#fff;letter-spacing:.5px;line-height:1.1;}
+.sec-head .sub{font-size:11px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
+.sec-body2{padding:18px 22px 22px;}
+.sec-row{margin-bottom:14px;}
+.sec-row:last-child{margin-bottom:0;}
+.sec-row .k{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.sec-row .v{font-size:12.8px;color:var(--mut);line-height:1.6;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{font-size:11px;background:rgba(58,143,213,.09);border:1px solid rgba(58,143,213,.2);color:#8fc0e6;border-radius:6px;padding:4px 9px;}
+
+/* FIGURE / SHOWCASE */
+.fig{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.1);position:relative;background:#000;}
+.fig img{width:100%;display:block;}
+.fig-cap{position:absolute;left:0;right:0;bottom:0;padding:26px 18px 12px;background:linear-gradient(transparent,rgba(6,14,31,.94));font-size:11.5px;color:#bcd4ea;letter-spacing:.3px;}
+.fig-cap b{color:var(--gold);}
+.fig-tag{position:absolute;top:12px;left:12px;font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;background:rgba(6,14,31,.8);border:1px solid rgba(201,168,76,.3);color:var(--gold);padding:4px 10px;border-radius:6px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+
+/* VISION GRID */
+.evidence{background:rgba(45,212,100,.05);border:1px solid rgba(45,212,100,.2);border-radius:12px;padding:18px 22px;margin:24px 0;display:flex;gap:24px;flex-wrap:wrap;}
+.evidence .e{flex:1;min-width:150px;}
+.evidence .e .m{font-family:'Rajdhani',sans-serif;font-size:24px;color:var(--green);font-weight:700;}
+.evidence .e .d{font-size:11.5px;color:var(--mut);margin-top:3px;}
+.algo-cats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;}
+.algo-cat{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:18px 20px;}
+.algo-cat h4{font-size:13px;color:#fff;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px;letter-spacing:.3px;}
+.algo-cat h4 .d{width:8px;height:8px;border-radius:2px;}
+.algo-cat ul{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.algo-cat li{font-size:12.3px;color:var(--mut);padding-left:15px;position:relative;line-height:1.45;}
+.algo-cat li::before{content:'·';position:absolute;left:3px;color:var(--gold);font-size:16px;top:-3px;}
+.algo-cat li b{color:#bcd4ea;font-weight:600;}
+
+/* PROOF */
+.proof{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.proof-card{background:linear-gradient(160deg,rgba(201,168,76,.06),rgba(255,255,255,.015));border:1px solid rgba(201,168,76,.16);border-radius:12px;padding:22px;}
+.proof-card .h{font-family:'Rajdhani',sans-serif;font-size:17px;color:var(--gold);margin-bottom:8px;letter-spacing:.5px;}
+.proof-card p{font-size:12.8px;color:var(--mut);line-height:1.6;}
+.proof-card p strong{color:#cfe2f2;}
+
+/* KIT */
+.kit{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.kit-item{display:flex;gap:13px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:16px 18px;}
+.kit-item .n{font-family:'Rajdhani',sans-serif;font-weight:700;color:var(--gold);font-size:18px;flex-shrink:0;width:24px;}
+.kit-item .t b{display:block;color:#fff;font-size:13.5px;margin-bottom:3px;font-weight:600;}
+.kit-item .t span{font-size:12px;color:var(--mut);line-height:1.5;}
+
+/* PARTNERSHIP */
+.partner{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.pcol{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:26px;}
+.pcol .logo-row{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.pcol .logo-row img{height:38px;border-radius:7px;}
+.pcol h3{font-family:'Rajdhani',sans-serif;font-size:20px;color:#fff;}
+.pcol .role{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);}
+.pcol ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.pcol li{font-size:13px;color:var(--mut);padding-left:18px;position:relative;line-height:1.5;}
+.pcol li::before{content:'✓';position:absolute;left:0;color:var(--green);font-size:11px;top:2px;}
+
+/* CTA / FOOTER */
+.cta{text-align:center;background:radial-gradient(circle at 50% 0%,#0e1d36,#060e1f);padding:70px 40px;}
+.cta h2{font-family:'Rajdhani',sans-serif;font-size:34px;color:#fff;letter-spacing:1px;margin-bottom:14px;}
+.cta h2 em{font-style:normal;color:var(--gold);}
+.cta p{font-size:15px;color:var(--mut);max-width:560px;margin:0 auto 8px;line-height:1.8;}
+.footer{border-top:1px solid rgba(255,255,255,.06);padding:30px 40px;text-align:center;}
+.footer .fl{display:flex;justify-content:center;gap:14px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
+.footer .fl img{height:30px;border-radius:6px;}
+.footer p{font-size:11.5px;color:var(--dim);line-height:1.7;}
+.footer b{color:var(--mut);}
+
+@media(max-width:760px){
+  .wrap,.hero,.cta,.footer{padding-left:22px;padding-right:22px;}
+  .hero h1{font-size:38px;}
+  .stack,.sectors,.algo-cats,.proof,.kit,.partner,.grid2{grid-template-columns:1fr;}
+  .stats{grid-template-columns:1fr 1fr;}
+  .grid3{grid-template-columns:1fr;}
+  .loop-arrow{display:none;}
+}
+@media print{
+  @page{margin:0;size:A4;}
+  html,body{background:var(--navy)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  *,*::before,*::after{animation:none!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .hero h1,.hero-desc,.byline,.pills,.stats,.eyebrow,.scard::before{opacity:1!important;}
+  .section{padding:34px 0;}
+  .scard,.sec-card,.fig,.algo-cat,.proof-card,.pcol,.loop-step,.kit-item,.stat,.evidence{break-inside:avoid;}
+  .sec-title,.eyebrow{break-after:avoid;}
+}
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+
+<!-- ══════════ HERO ══════════ -->
+<header class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-radial"></div>
+  <div class="hero-inner">
+    <div class="cobrand">
+      <img src="assets/logo.png" alt="BBA Technology">
+      <span class="x">×</span>
+      <div class="wordmark">AEROSMART<small>UAV Trading &amp; Field Operations</small></div>
+    </div>
+
+    <div class="eyebrow">Autonomous Drone Systems · Capability Brief</div>
+    <h1>Autonomous Drone <em>Inspection</em><br>&amp; Aerial <em>Intelligence</em></h1>
+    <p class="hero-desc">
+      A complete, field-proven stack: drones that <strong>fly themselves</strong> — even where GPS does not exist —
+      <strong>see and understand</strong> what they capture with on-board AI, <strong>decide</strong> in real time,
+      and turn every flight into a <strong>report on a live dashboard</strong>. Inspection is the entry point.
+      The platform underneath it powers surveillance, mapping, security and fully unmanned 24/7 operations.
+    </p>
+    <p class="byline">Technology &amp; AI engineering by <b>BBA Technology</b> (İzmir, Türkiye)&nbsp;&nbsp;·&nbsp;&nbsp;Field delivery, regional operations &amp; support by <b>Aerosmart</b></p>
+
+    <div class="pills">
+      <span class="pill gold">GPS-Denied Autonomous Flight</span>
+      <span class="pill gold">28 AI Vision Use-Cases</span>
+      <span class="pill">Swarm / Multi-UAV</span>
+      <span class="pill">Live Command Dashboards</span>
+      <span class="pill">Fully Unmanned (Dock &amp; Charge)</span>
+      <span class="pill">Works on Any Drone</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="num">19</div><div class="lbl">Trained AI vision algorithms, deployed</div></div>
+      <div class="stat"><div class="num">27/28</div><div class="lbl">Client use-cases delivered &amp; validated</div></div>
+      <div class="stat"><div class="num">0&nbsp;GPS</div><div class="lbl">Stable autonomous flight, no satellites needed</div></div>
+      <div class="stat"><div class="num">24/7</div><div class="lbl">Unmanned operation — dock, charge, repeat</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════ THE LOOP ══════════ -->
+<section class="section"><div class="wrap">
+  <div class="eyebrow">How It Works · The Autonomy Loop</div>
+  <div class="sec-title">One closed loop — <em>from take-off to report, with no pilot</em></div>
+  <p class="sec-body">Every BBA deployment runs the same loop. A human sets the objective once; the system executes it repeatedly,
+  on schedule, and only escalates to a person when something matters.</p>
+
+  <div class="loop">
+    <div class="loop-step"><div class="loop-num">01 — FLY</div><h4>Autonomous Flight</h4><p>Take-off, route, obstacle avoidance and landing — handled by the on-board autopilot. Indoor, outdoor, GPS or no GPS.</p></div>
+    <div class="loop-arrow">→</div>
+    <div class="loop-step"><div class="loop-num">02 — SEE</div><h4>AI Vision</h4><p>On-board / edge AI detects cracks, hotspots, defects, intrusions, assets, people and change — frame by frame.</p></div>
+    <div class="loop-arrow">→</div>
+    <div class="loop-step"><div class="loop-num">03 — DECIDE</div><h4>Real-Time Logic</h4><p>Thresholds, zones and persistence filters turn raw detections into confirmed alerts — not noise.</p></div>
+    <div class="loop-arrow">→</div>
+    <div class="loop-step"><div class="loop-num">04 — REPORT</div><h4>Dashboard &amp; Evidence</h4><p>Geo-tagged findings, counts, heatmaps and clips land on a live dashboard and exportable report.</p></div>
+  </div>
+  <div class="loop-back">↺&nbsp;&nbsp;Then the drone returns to its dock, recharges, and repeats — on a schedule, without a crew on site.</div>
+</div></section>
+
+<!-- ══════════ CAPABILITY STACK ══════════ -->
+<section class="section"><div class="wrap">
+  <div class="eyebrow">The Full Stack · Our Core Competencies</div>
+  <div class="sec-title">Four layers we build and own <em>end-to-end</em></div>
+  <p class="sec-body">Most vendors sell one piece — a drone, or a camera, or a dashboard. BBA engineers the entire vertical stack
+  and integrates it as one product. Inspection is simply one mission we point this stack at.</p>
+
+  <div class="stack">
+    <div class="scard" style="--accent:var(--blue)">
+      <div class="ic">🛩️</div>
+      <h3>Autonomous Flight &amp; Control</h3>
+      <div class="tag">Fly anywhere, no pilot</div>
+      <ul>
+        <li>PX4 / MAVLink autopilot integration on any airframe</li>
+        <li>GPS-denied flight via on-board SLAM / visual-inertial odometry</li>
+        <li>Depth-camera obstacle avoidance &amp; sensor fusion</li>
+        <li>Autonomous take-off, waypoint, frontier exploration &amp; landing</li>
+        <li>Precision landing (visual marker) onto a charging dock</li>
+      </ul>
+    </div>
+    <div class="scard" style="--accent:var(--green)">
+      <div class="ic">👁️</div>
+      <h3>AI Computer Vision</h3>
+      <div class="tag">See &amp; understand</div>
+      <ul>
+        <li>19 trained models across 28 real-world use-cases</li>
+        <li>Detection, counting, density, change &amp; anomaly analysis</li>
+        <li>Crack / corrosion / defect &amp; surface-quality inspection</li>
+        <li>Thermal, fire &amp; smoke, vegetation &amp; asset monitoring</li>
+        <li>Custom models trained to a client's specific target</li>
+      </ul>
+    </div>
+    <div class="scard" style="--accent:var(--gold)">
+      <div class="ic">🖥️</div>
+      <h3>Command Center &amp; Dashboards</h3>
+      <div class="tag">Decide &amp; report</div>
+      <ul>
+        <li>Live ground-control station with full telemetry</li>
+        <li>Map layers: orthomosaic · LIDAR · thermal · event overlays</li>
+        <li>AI co-pilot — natural-language tasking &amp; alerts</li>
+        <li>SaaS analytics: counts, heatmaps, trends, KPI reporting</li>
+        <li>Geo-tagged evidence &amp; exportable audit reports</li>
+      </ul>
+    </div>
+    <div class="scard" style="--accent:var(--cyan)">
+      <div class="ic">🔁</div>
+      <h3>Automation &amp; Unmanning</h3>
+      <div class="tag">Run it without a crew</div>
+      <ul>
+        <li>Dock-and-charge cradle for fully unmanned 24/7 cycles</li>
+        <li>Scheduled, repeatable autonomous patrol &amp; inspection</li>
+        <li>Swarm / multi-UAV coordination with sector tasking</li>
+        <li>Alert-driven escalation — humans only when needed</li>
+        <li>Designed to run offline / on-premises, no cloud dependency</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<!-- ══════════ INSPECTION PLAYBOOKS ══════════ -->
+<section class="section"><div class="wrap">
+  <div class="eyebrow">Inspection Playbooks · Built For The Field</div>
+  <div class="sec-title">Four sectors, ready to demo <em>day one</em></div>
+  <p class="sec-body">Each playbook pairs an autonomous <strong>flight profile</strong> with the exact <strong>AI detections</strong>
+  the asset owner cares about. The same platform reconfigures between them in software.</p>
+
+  <div class="sectors">
+    <div class="sec-card">
+      <div class="sec-head"><div class="badge" style="background:rgba(255,152,0,.12);">☀️</div>
+        <div><h3>Energy &amp; Solar</h3><div class="sub">Solar farms · substations · power plants</div></div></div>
+      <div class="sec-body2">
+        <div class="sec-row"><div class="k">Flight profile</div><div class="v">Automated grid survey over panel arrays at fixed altitude; thermal + visual dual capture; repeatable weekly orthomosaic.</div></div>
+        <div class="sec-row"><div class="k">AI detects</div><div class="chips">
+          <span class="chip">Hot-spot / cell failure (thermal)</span><span class="chip">Cracked &amp; soiled panels</span>
+          <span class="chip">Vegetation encroachment</span><span class="chip">Missing / damaged modules</span><span class="chip">Output anomaly mapping</span></div></div>
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <div class="sec-head"><div class="badge" style="background:rgba(58,143,213,.12);">📡</div>
+        <div><h3>Transmission &amp; Telecom</h3><div class="sub">Power lines · pylons · comms towers</div></div></div>
+      <div class="sec-body2">
+        <div class="sec-row"><div class="k">Flight profile</div><div class="v">Corridor-follow along lines / tower-orbit captures; close-stand-off imaging where GPS is weak; no climbers, no shutdown.</div></div>
+        <div class="sec-row"><div class="k">AI detects</div><div class="chips">
+          <span class="chip">Corrosion &amp; structural defects</span><span class="chip">Insulator / fitting damage</span>
+          <span class="chip">Vegetation under lines</span><span class="chip">Conductor hot-spots (thermal)</span><span class="chip">Antenna / dish change</span></div></div>
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <div class="sec-head"><div class="badge" style="background:rgba(201,168,76,.14);">⛏️</div>
+        <div><h3>Mining &amp; Construction</h3><div class="sub">Open pits · stockpiles · job sites</div></div></div>
+      <div class="sec-body2">
+        <div class="sec-row"><div class="k">Flight profile</div><div class="v">Area-mapping sorties producing orthomosaics &amp; 3D models; weekly baselines for volume &amp; progress comparison.</div></div>
+        <div class="sec-row"><div class="k">AI detects</div><div class="chips">
+          <span class="chip">Stockpile volume &amp; change</span><span class="chip">Work-progress vs. baseline</span>
+          <span class="chip">Slope / bench movement</span><span class="chip">Equipment &amp; vehicle count</span><span class="chip">Unauthorized / illegal structures</span></div></div>
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <div class="sec-head"><div class="badge" style="background:rgba(255,87,87,.12);">🛢️</div>
+        <div><h3>Oil, Gas &amp; Pipeline</h3><div class="sub">Pipelines · refineries · tank farms</div></div></div>
+      <div class="sec-body2">
+        <div class="sec-row"><div class="k">Flight profile</div><div class="v">Long-corridor pipeline patrol &amp; facility orbit; flare-stack &amp; tank-roof inspection; thermal leak / hot-spot sweep.</div></div>
+        <div class="sec-row"><div class="k">AI detects</div><div class="chips">
+          <span class="chip">Fire &amp; smoke (early)</span><span class="chip">Thermal leak / anomaly</span>
+          <span class="chip">Corrosion &amp; tank-roof defects</span><span class="chip">Right-of-way intrusion</span><span class="chip">Spill / surface anomaly</span></div></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ══════════ AI VISION ENGINE ══════════ -->
+<section class="section"><div class="wrap">
+  <div class="eyebrow">The Engine · Real Models, Real Footage</div>
+  <div class="sec-title">AI vision that has already <em>shipped</em></div>
+  <p class="sec-body">This is not a slide-ware promise. The library below is <strong>trained, evaluated and deployed</strong> —
+  delivered as a 28-use-case program for an aerial-monitoring client. The same engine retargets to industrial inspection
+  by swapping the detection class and threshold logic.</p>
+
+  <div class="grid3" style="margin-bottom:24px;">
+    <div class="fig"><span class="fig-tag">Live detection</span><img src="assets/cv_people.jpg" alt="People detection">
+      <div class="fig-cap"><b>People &amp; density</b> — 145 detected, per-zone counts &amp; crowding alerts, real aerial frame.</div></div>
+    <div class="fig"><span class="fig-tag">Live detection</span><img src="assets/cv_asset.jpg" alt="Asset monitoring">
+      <div class="fig-cap"><b>Asset monitoring</b> — inventory &amp; missing/damaged-asset flags via zero-shot detection.</div></div>
+    <div class="fig"><span class="fig-tag">Live detection</span><img src="assets/cv_litter.jpg" alt="Anomaly / object detection">
+      <div class="fig-cap"><b>Object / anomaly</b> — fine-tuned model spotting small ground objects from altitude.</div></div>
+  </div>
+
+  <div class="evidence">
+    <div class="e"><div class="m">19</div><div class="d">trained models in production</div></div>
+    <div class="e"><div class="m">P 0.88</div><div class="d">vehicle / object detection precision</div></div>
+    <div class="e"><div class="m">+85%</div><div class="d">smoke-detection mAP improvement (v1→v2)</div></div>
+    <div class="e"><div class="m">27/28</div><div class="d">client use-cases met &amp; validated</div></div>
+  </div>
+
+  <div class="algo-cats">
+    <div class="algo-cat">
+      <h4><span class="d" style="background:var(--gold)"></span>Inspection &amp; Survey</h4>
+      <ul>
+        <li><b>Infrastructure inspection</b> — crack/defect detection via Canny + Gabor edge analysis &amp; texture scoring</li>
+        <li><b>Surface defect</b> — corrosion, cracks &amp; anomaly flags with confidence scoring</li>
+        <li><b>Change detection</b> — ORB feature alignment + homography, GPS-free before/after comparison</li>
+        <li><b>Work-progress monitoring</b> — % completion vs. baseline orthomosaic</li>
+        <li><b>Site documentation</b> — geo-tagged evidence capture for audit</li>
+      </ul>
+    </div>
+    <div class="algo-cat">
+      <h4><span class="d" style="background:var(--red)"></span>Hazard &amp; Thermal</h4>
+      <ul>
+        <li><b>Fire &amp; smoke</b> — YOLOv8 + temporal persistence filter, confidence-tiered alerts</li>
+        <li><b>Thermal hot-spot</b> — anomaly mapping for panels, conductors &amp; leaks</li>
+        <li><b>Water / surface anomaly</b> — foam, oil &amp; discoloration detection</li>
+        <li><b>Coverage analysis</b> — % of frame affected → HIGH / CRITICAL tiers</li>
+        <li><b>False-positive suppression</b> — contrast &amp; min-area filtering</li>
+      </ul>
+    </div>
+    <div class="algo-cat">
+      <h4><span class="d" style="background:var(--green)"></span>Environment &amp; Asset</h4>
+      <ul>
+        <li><b>Vegetation health/damage</b> — ExG (NDVI-like on RGB), per-pixel health scoring</li>
+        <li><b>Asset monitoring</b> — zero-shot inventory, missing &amp; damage flags</li>
+        <li><b>Vegetation encroachment</b> — patch analysis under power lines</li>
+        <li><b>Erosion &amp; shoreline / terrain change</b> — temporal baseline comparison</li>
+        <li><b>Bird / animal &amp; environmental events</b></li>
+      </ul>
+    </div>
+    <div class="algo-cat">
+      <h4><span class="d" style="background:var(--blue)"></span>Security &amp; Operations</h4>
+      <ul>
+        <li><b>Restricted-zone intrusion</b> — person/vehicle in no-entry area → incident</li>
+        <li><b>Vehicle &amp; equipment detection / count</b> (VisDrone-trained)</li>
+        <li><b>People counting, density &amp; overcrowding alerts</b></li>
+        <li><b>Illegal structure detection</b> — vs. approved baseline</li>
+        <li><b>Parking / yard utilization &amp; zone density</b></li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<!-- ══════════ GPS-DENIED FLIGHT ══════════ -->
+<section class="section"><div class="wrap">
+  <div class="eyebrow">Differentiator · Flight Autonomy</div>
+  <div class="sec-title">Flies where GPS <em>doesn't exist</em></div>
+  <p class="sec-body">Indoors, under structures, inside tunnels, between tank rows, beneath a refinery deck — anywhere satellites
+  drop out, most drones are grounded. BBA's stack keeps flying using <strong>on-board visual-inertial SLAM</strong>,
+  holding position and avoiding obstacles with <strong>zero GPS</strong>. This is the capability that opens inspection jobs
+  competitors physically cannot reach.</p>
+
+  <div class="grid2">
+    <div class="fig"><span class="fig-tag">Live · PX4 firmware</span><img src="assets/poster_gpsdenied.jpg" alt="GPS-denied flight">
+      <div class="fig-cap"><b>GPS-denied autonomous flight</b> — visual-inertial odometry holding a stable map indoors, no satellites.</div></div>
+    <div class="fig"><img src="assets/pursuit.jpg" alt="Tracking &amp; obstacle awareness">
+      <div class="fig-cap"><b>On-board perception</b> — depth-based obstacle avoidance &amp; target tracking in real time.</div></div>
+  </div>
+</div></section>
+
+<!-- ══════════ SWARM + CO-PILOT ══════════ -->
+<section class="section"><div class="wrap">
+  <div class="eyebrow">Differentiator · Multi-UAV &amp; AI Co-Pilot</div>
+  <div class="sec-title">One operator, <em>many drones</em>, one AI brain</div>
+  <p class="sec-body">Cover a large site faster by splitting it into sectors and assigning a drone to each — coordinated automatically.
+  An <strong>AI co-pilot</strong> accepts plain-language commands ("secure this facility, patrol all sectors"), arms the fleet,
+  and narrates decisions back to the operator. The screenshot below is the real <strong>BBA AI Companion</strong> control station
+  driving a live multi-drone mission.</p>
+
+  <div class="fig"><span class="fig-tag">Real product · live mission</span><img src="assets/poster_swarm.jpg" alt="BBA AI Companion multi-drone">
+    <div class="fig-cap"><b>BBA AI Companion</b> — multi-drone sector tasking, formation flight, radio chatter, commander decisions &amp; AI assistant, running on real PX4/MAVLink.</div></div>
+</div></section>
+
+<!-- ══════════ COMMAND CENTER ══════════ -->
+<section class="section"><div class="wrap">
+  <div class="eyebrow">Command Center · Dashboards &amp; Analytics</div>
+  <div class="sec-title">Every flight becomes a <em>decision and a report</em></div>
+  <p class="sec-body">The ground-control platform fuses live telemetry, switchable map layers and AI events into one operating picture —
+  then rolls findings up into a <strong>SaaS analytics layer</strong>: counts, heatmaps, trends, KPI compliance and
+  exportable, geo-tagged audit reports. Built to run <strong>on-premises / offline</strong> for sites with no reliable connectivity.</p>
+
+  <div class="grid2">
+    <div class="fig"><span class="fig-tag">GCS · operation map</span><img src="assets/gcs.jpg" alt="Command center map">
+      <div class="fig-cap"><b>Multi-sector operation map</b> — orthomosaic / LIDAR / thermal layers, live telemetry &amp; coverage tracking.</div></div>
+    <div class="fig"><span class="fig-tag">Analytics SaaS</span><img src="assets/poster_flighthub.jpg" alt="Analytics platform">
+      <div class="fig-cap"><b>Analytics &amp; reporting</b> — KPIs, trends &amp; evidence; integrates with enterprise fleet platforms.</div></div>
+  </div>
+</div></section>
+
+<!-- ══════════ AERIAL MAPPING ══════════ -->
+<section class="section"><div class="wrap">
+  <div class="eyebrow">Survey · Mapping &amp; 3D</div>
+  <div class="sec-title">Turn a site into <em>measurable data</em></div>
+  <p class="sec-body">Automated mapping sorties produce high-resolution orthomosaics and 3D models — the baseline for volume
+  measurement, progress tracking and change detection across mining, construction and large facilities.</p>
+  <div class="fig"><span class="fig-tag">Orthomosaic · 3D survey</span><img src="assets/aerial.jpg" alt="Aerial orthomosaic">
+    <div class="fig-cap"><b>Automated area survey</b> — orthomosaic basemap for inspection layers, volumes &amp; period-over-period change.</div></div>
+</div></section>
+
+<!-- ══════════ PROOF ══════════ -->
+<section class="section"><div class="wrap">
+  <div class="eyebrow">Track Record · Not A Prototype</div>
+  <div class="sec-title">Delivered work, <em>real deployments</em></div>
+  <div class="proof">
+    <div class="proof-card"><div class="h">Digital Twin · Mall Complex</div><p><strong>3D digital-twin &amp; AI monitoring</strong> platform for a large shopping-mall complex — aerial + AI surveillance at scale.</p></div>
+    <div class="proof-card"><div class="h">AI &amp; Unmanned Systems · Türkiye</div><p><strong>27 of 28 client use-cases delivered</strong> with 19 trained models — building AI infrastructure &amp; unmanned autonomous systems.</p></div>
+    <div class="proof-card"><div class="h">GPS-Denied Flight</div><p>Stable autonomous indoor flight on <strong>real PX4 firmware</strong> with on-board SLAM — validated, repeatable, zero GPS.</p></div>
+    <div class="proof-card"><div class="h">Outdoor Autonomous Patrol</div><p>Dock-launched, GPS-based patrol with <strong>automatic charging &amp; precision landing</strong> — the unmanned 24/7 loop, working.</p></div>
+  </div>
+</div></section>
+
+<!-- ══════════ DEMO KIT ══════════ -->
+<section class="section"><div class="wrap">
+  <div class="eyebrow">For The Africa Demos · What You Can Show</div>
+  <div class="sec-title">A self-contained <em>demo kit</em> to carry</div>
+  <p class="sec-body">Everything below runs <strong>offline on a laptop</strong> — no connectivity required at the client site.
+  Lead with inspection; expand into the full platform when the room leans in.</p>
+  <div class="kit">
+    <div class="kit-item"><div class="n">1</div><div class="t"><b>This capability brief</b><span>Open in any browser, full-screen — your visual narrative end-to-end.</span></div></div>
+    <div class="kit-item"><div class="n">2</div><div class="t"><b>Live AI-vision clips</b><span>Real detection videos: people, vehicles, fire/smoke, litter, assets — running on aerial footage.</span></div></div>
+    <div class="kit-item"><div class="n">3</div><div class="t"><b>Command-station screenshots</b><span>The BBA AI Companion driving a multi-drone mission — proves the software is real.</span></div></div>
+    <div class="kit-item"><div class="n">4</div><div class="t"><b>Sector one-pagers</b><span>Energy, transmission, mining, oil &amp; gas — hand a focused sheet to the right buyer.</span></div></div>
+    <div class="kit-item"><div class="n">5</div><div class="t"><b>GPS-denied &amp; swarm posters</b><span>The two "wow" differentiators competitors can't match — print or screen.</span></div></div>
+    <div class="kit-item"><div class="n">6</div><div class="t"><b>Custom demo on request</b><span>Send a target asset photo/video ahead and we tune a detection clip for that client.</span></div></div>
+  </div>
+</div></section>
+
+<!-- ══════════ PARTNERSHIP ══════════ -->
+<section class="section"><div class="wrap">
+  <div class="eyebrow">How We Work Together</div>
+  <div class="sec-title">Two companies, <em>one offering</em></div>
+  <div class="partner">
+    <div class="pcol">
+      <div class="logo-row"><img src="assets/logo.png" alt="BBA"><div><h3>BBA Technology</h3><div class="role">Technology &amp; AI · İzmir, Türkiye</div></div></div>
+      <ul>
+        <li>Autonomy, flight-control &amp; SLAM engineering</li>
+        <li>AI computer-vision models &amp; custom training</li>
+        <li>Command station, dashboards &amp; analytics platform</li>
+        <li>Product IP, integration &amp; ongoing R&amp;D</li>
+      </ul>
+    </div>
+    <div class="pcol">
+      <div class="logo-row"><div class="wordmark" style="font-size:18px;">AEROSMART</div></div>
+      <ul>
+        <li>Client relationship &amp; regional presence</li>
+        <li>On-site field operations &amp; flight services</li>
+        <li>Hardware supply, logistics &amp; local support</li>
+        <li>Demo delivery &amp; commercial front-line</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<!-- ══════════ CTA ══════════ -->
+<section class="cta">
+  <div class="live" style="margin-bottom:18px;justify-content:center;display:flex;">Ready to deploy</div>
+  <h2>Bring a problem. <em>We'll fly it, see it, and report it.</em></h2>
+  <p>Tell us the asset and the country, and we'll shape a targeted demo — and a deployment plan behind it — within days.</p>
+</section>
+
+<footer class="footer">
+  <div class="fl"><img src="assets/logo.png" alt="BBA"><span style="color:var(--dim);">×</span><span class="wordmark" style="font-size:16px;">AEROSMART</span></div>
+  <p><b>BBA Technology</b> — Autonomous Drone &amp; AI Systems · İzmir, Türkiye&nbsp;&nbsp;|&nbsp;&nbsp;<b>Aerosmart</b> — UAV Trading &amp; Field Operations</p>
+  <p style="margin-top:6px;">Capability brief prepared for partner-led client demonstrations. Technology &amp; figures reflect delivered work and validated deployments.</p>
+</footer>
+
+</body>
+</html>
